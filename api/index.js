@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { User } from "./models/User.cjs";
+import User from "../models/User.js";
 
 dotenv.config();
 
