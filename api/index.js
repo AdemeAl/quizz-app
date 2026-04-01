@@ -16,8 +16,9 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const PROJECT_ROOT = path.resolve(__dirname, "..\");
 const QUESTIONS_FILE_PATH = path.resolve(
-  __dirname,
+  PROJECT_ROOT,
   "src/questions_data/questions.json",
 );
 
@@ -320,14 +321,17 @@ app.post("/api/quiz/analyse", async (req, res) => {
   }
 });
 
-// Servir les fichiers statiques
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "landing-page")));
-app.use(express.static(path.join(__dirname, "src")));
+// Servir les fichiers statiques (depuis la racine du projet)
+app.use(express.static(path.join(PROJECT_ROOT, "public")));
+app.use(express.static(path.join(PROJECT_ROOT, "landing-page")));
+app.use(express.static(path.join(PROJECT_ROOT, "src")));
 
-// Route par défaut pour quiz.html
+// Route racine et quiz
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "quiz.html"));
+  res.sendFile(path.join(PROJECT_ROOT, "quiz.html"));
+});
+app.get("/quiz.html", (req, res) => {
+  res.sendFile(path.join(PROJECT_ROOT, "quiz.html"));
 });
 
 export default app;
