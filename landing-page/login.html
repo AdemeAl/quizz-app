@@ -170,7 +170,7 @@
           if (!username || !email || !password)
             return showMessage("Veuillez compléter tous les champs.");
           try {
-            const res = await fetch("http://localhost:5000/signup", {
+            const res = await fetch("/api/signup", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, email, password }),
@@ -216,7 +216,7 @@
               ? { email: identifier, password }
               : { username: identifier, password };
 
-            const res = await fetch("http://localhost:5000/login", {
+            const res = await fetch("/api/login", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(body),
