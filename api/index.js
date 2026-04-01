@@ -26,14 +26,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// CSP Headers pour Vercel
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.skypack.dev; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://vercel.live https://okbquenkhxxtuvoroybm.supabase.co wss://okbquenkhxxtuvoroybm.supabase.co https://cdn.jsdelivr.net; frame-src 'self' https://vercel.live;",
-  );
-  next();
-});
+// CSP Headers pour Vercel - Temporairement désactivée pour test
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     "Content-Security-Policy",
+//     "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.skypack.dev; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://vercel.live https://okbquenkhxxtuvoroybm.supabase.co wss://okbquenkhxxtuvoroybm.supabase.co https://cdn.jsdelivr.net; frame-src 'self' https://vercel.live;",
+//   );
+//   next();
+// });
 
 const upload = multer({ storage: multer.memoryStorage() });
 
