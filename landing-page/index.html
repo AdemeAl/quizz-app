@@ -56,11 +56,7 @@
               <li>Défis quotidiens</li>
               <li>Classement mondial</li>
             </ul>
-            <form
-              id="quiz-form"
-              action="/api/quiz/theme"
-              method="POST"
-            >
+            <form id="quiz-form" action="/api/quiz/theme" method="POST">
               <select name="langue" id="langue-select" required>
                 <option value="">🌐 Sélectionnez une langue</option>
                 <option value="français">🇫🇷 Français</option>
@@ -220,12 +216,12 @@
           if (window.location.protocol !== "file:") {
             return `${window.location.origin}${apiUrl}`;
           }
-          return `http://localhost:5500${apiUrl}`;
+          return `${window.location.origin}${apiUrl}`;
         }
         if (window.location.protocol !== "file:") {
           return `${window.location.origin}/quiz.html`;
         }
-        return "http://localhost:5500/quiz.html";
+        return `${window.location.origin}/quiz.html`;
       };
 
       document.getElementById("quiz-form").addEventListener("submit", (e) => {
