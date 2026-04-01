@@ -166,7 +166,7 @@ async function analyseQuiz() {
     const urlParams = new URLSearchParams(window.location.search);
     const currentTheme = urlParams.get("theme") || "Général";
 
-    const response = await fetch("http://localhost:3000/api/quiz/analyse", {
+    const response = await fetch("/api/quiz/analyse", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
