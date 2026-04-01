@@ -16,7 +16,10 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const QUESTIONS_FILE_PATH = path.resolve(__dirname, "src/questions_data/questions.json");
+const QUESTIONS_FILE_PATH = path.resolve(
+  __dirname,
+  "src/questions_data/questions.json",
+);
 
 app.use(cors());
 app.use(express.json());
@@ -30,11 +33,17 @@ const ai = new GoogleGenAI({
 });
 
 // Connexion MongoDB
-mongoose.connect(process.env.MONGO_URI).then(() => console.log("✅ MongoDB connecté")).catch((err) => console.log(err));
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connecté"))
+  .catch((err) => console.log(err));
 
 // Fonctions utilitaires
 const cleanAIResponse = (text) => {
-  return text.replace(/```json/g, "").replace(/```/g, "").trim();
+  return text
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
 };
 
 const saveQuestionsFromAI = (rawText) => {
@@ -43,14 +52,20 @@ const saveQuestionsFromAI = (rawText) => {
   if (!Array.isArray(parsed) || parsed.length === 0) {
     throw new Error("Le format de questions est invalide.");
   }
-  fs.writeFileSync(QUESTIONS_FILE_PATH, JSON.stringify(parsed, null, 2), "utf-8");
+  fs.writeFileSync(
+    QUESTIONS_FILE_PATH,
+    JSON.stringify(parsed, null, 2),
+    "utf-8",
+  );
 };
 
 // Routes Auth
 app.post("/signup", async (req, res) => {
   try {
     const username = String(req.body?.username || "").trim();
-    const email = String(req.body?.email || "").trim().toLowerCase();
+    const email = String(req.body?.email || "")
+      .trim()
+      .toLowerCase();
     const password = String(req.body?.password || "");
 
     if (!username || !email || !password) {
@@ -75,7 +90,9 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const email = String(req.body?.email || "").trim().toLowerCase();
+    const email = String(req.body?.email || "")
+      .trim()
+      .toLowerCase();
     const username = String(req.body?.username || "").trim();
     const password = String(req.body?.password || "");
 
@@ -93,7 +110,9 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Mot de passe incorrect" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "2h" });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "2h",
+    });
     res.json({
       message: "Connexion réussie",
       token,
@@ -251,7 +270,8 @@ app.post("/api/quiz/analyse", async (req, res) => {
 
     if (errors.length === 0) {
       return res.json({
-        analysis: "Parfait ! Tu as fait un sans-faute. Tu maîtrises parfaitement ce sujet.",
+        analysis:
+          "Parfait ! Tu as fait un sans-faute. Tu maîtrises parfaitement ce sujet.",
       });
     }
 
