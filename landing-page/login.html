@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Connexion / Inscription</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="stylequiz.css" />
+    
+  </head>
+
+  <body>
+    <div class="page">
+      <div class="flex">
+        <header class="topbar">
+          <div class="brand">QuizMaster</div>
+          <button
+            class="burger-btn"
+            id="menu-toggle"
+            type="button"
+            aria-label="Ouvrir le menu  "
+            aria-expanded="false"
+          >
+            ☰
+          </button>
+        </header>
+        <nav class="top-actions">
+          <a href="index.html">Accueil</a>
+          <a href="login.html">Se connecter / S'inscrire</a>
+          <a href="leaderboard.html">Classement</a>
+        </nav>
+      </div>
+
+      <section class="auth-section">
+        <div class="auth-header">
+          <h1>Bienvenue</h1>
+          <p>Connectez-vous ou créez un compte pour commencer</p>
+        </div>
+
+        <div class="tabs-container">
+          <button id="tab-login" class="tab-btn active">🔐 Connexion</button>
+          <button id="tab-register" class="tab-btn">✍️ Inscription</button>
+        </div>
+
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <label for="login-identifier">Email ou Pseudo</label>
+            <input
+              id="login-identifier"
+              type="text"
+              placeholder="Entrez votre email ou pseudo"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="login-password">Mot de passe</label>
+            <input
+              id="login-password"
+              type="password"
+              placeholder="Entrez votre mot de passe"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-submit">Se connecter</button>
+        </form>
+
+        <form id="register-form" class="auth-form" style="display: none">
+          <div class="form-group">
+            <label for="reg-pseudo">Pseudo</label>
+            <input
+              id="reg-pseudo"
+              name="username"
+              type="text"
+              placeholder="Choisissez un pseudo"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-email">Adresse e-mail</label>
+            <input
+              id="reg-email"
+              type="email"
+              name="email"
+              placeholder="votre@email.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="reg-password">Mot de passe</label>
+            <input
+              id="reg-password"
+              type="password"
+              name="password"
+              placeholder="Créez un mot de passe sécurisé"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-submit">Créer un compte</button>
+        </form>
+
+        <div id="message" class="message-box"></div>
+        <div id="session-area" class="session-box"></div>
+      </section>
+    </div>
+
+    <script>
+      function getSession() {
+        return JSON.parse(localStorage.getItem("sessionUser") || "null");
+      }
+      function setSession(u) {
+        if (u) localStorage.setItem("sessionUser", JSON.stringify(u));
+        else localStorage.removeItem("sessionUser");
+      }
+
+      function showMessage(text, color = "#c00") {
+        const m = document.getElementById("message");
+        m.textContent = text;
+        m.className = "message-box " + (color === "#070" ? "success" : "error");
+        setTimeout(() => {
+          if (m.textContent === text) {
+            m.textContent = "";
+            m.className = "message-box";
+          }
+        }, 4000);
+      }
+
+      // Burger menu (mobile)
+      const burgerBtn = document.getElementById("menu-toggle");
+      const topActions = document.querySelector(".top-actions");
+      if (burgerBtn && topActions) {
+        burgerBtn.addEventListener("click", () => {
+          const opened = topActions.classList.toggle("open");
+          burgerBtn.setAttribute("aria-expanded", String(opened));
+        });
+
+        topActions.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            topActions.classList.remove("open");
+            burgerBtn.setAttribute("aria-expanded", "false");
+          });
+        });
+      }
+
+      document.getElementById("tab-login").addEventListener("click", () => {
+        document.getElementById("login-form").style.display = "";
+        document.getElementById("register-form").style.display = "none";
+        document.getElementById("tab-login").classList.add("active");
+        document.getElementById("tab-register").classList.remove("active");
+      });
+      document.getElementById("tab-register").addEventListener("click", () => {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("register-form").style.display = "";
+        document.getElementById("tab-register").classList.add("active");
+        document.getElementById("tab-login").classList.remove("active");
+      });
+
+      document
+        .getElementById("register-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const username = document.getElementById("reg-pseudo").value.trim();
+          const email = document
+            .getElementById("reg-email")
+            .value.trim()
+            .toLowerCase();
+          const password = document.getElementById("reg-password").value;
+          if (!username || !email || !password)
+            return showMessage("Veuillez compléter tous les champs.");
+          try {
+            const res = await fetch("http://localhost:5000/signup", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, email, password }),
+            });
+            let data = {};
+            const ct = res.headers.get("content-type") || "";
+            if (ct.includes("application/json")) {
+              try {
+                data = await res.json();
+              } catch (err) {
+                data = {};
+              }
+            }
+            if (!res.ok)
+              return showMessage(
+                data.message || "Erreur lors de l'inscription.",
+              );
+            showMessage("✅ Compte créé. Redirection vers login...", "#070");
+            setTimeout(() => {
+              document.getElementById("tab-login").click();
+              document.getElementById("login-identifier").value = email;
+              document.getElementById("login-password").value = "";
+            }, 800);
+          } catch (err) {
+            console.error(err);
+            showMessage("Erreur réseau.");
+          }
+        });
+
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const identifier = document
+            .getElementById("login-identifier")
+            .value.trim();
+          const password = document.getElementById("login-password").value;
+          if (!identifier || !password)
+            return showMessage("Veuillez compléter tous les champs.");
+          try {
+            const isEmail = identifier.includes("@");
+            const body = isEmail
+              ? { email: identifier, password }
+              : { username: identifier, password };
+
+            const res = await fetch("http://localhost:5000/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            let data = {};
+            const ct2 = res.headers.get("content-type") || "";
+            if (ct2.includes("application/json")) {
+              try {
+                data = await res.json();
+              } catch (err) {
+                data = {};
+              }
+            }
+            if (!res.ok)
+              return showMessage(data.message || "Identifiants invalides.");
+            setSession(data.user);
+            if (data.token) localStorage.setItem("token", data.token);
+            showMessage(
+              "✅ Connexion réussie. Redirection vers index...",
+              "#070",
+            );
+            setTimeout(() => (location.href = "index.html"), 600);
+          } catch (err) {
+            console.error(err);
+            showMessage("Erreur réseau.");
+          }
+        });
+
+      function renderSessionArea() {
+        const area = document.getElementById("session-area");
+        const s = getSession();
+        if (!s) {
+          area.innerHTML = "";
+          return;
+        }
+        area.innerHTML =
+          `<p style="text-align: center; color: #070; margin-top: 20px;">Connecté : <strong>${s.username}</strong> (${s.email})</p>` +
+          ` <div style="text-align: center;"><button id="logout" style="margin-top:10px; padding: 8px 16px; background: #c00; color: white; border: none; border-radius: 4px; cursor: pointer;">Se déconnecter</button></div>`;
+        document.getElementById("logout").addEventListener("click", () => {
+          setSession(null);
+          localStorage.removeItem("token");
+          renderSessionArea();
+          showMessage("✅ Déconnecté.", "#070");
+          document.getElementById("tab-login").click();
+          document.getElementById("login-identifier").value = "";
+          document.getElementById("login-password").value = "";
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", renderSessionArea);
+
+      // Page transition animation 
+      document.querySelectorAll("a").forEach((link) => {
+        if (
+          !link.href.includes("http") &&
+          link.href &&
+          !link.href.includes("#")
+        ) {
+          link.addEventListener("click", (e) => {
+            const page = document.querySelector(".page");
+            if (page && !link.href.includes(window.location.pathname)) {
+              e.preventDefault();
+              page.classList.add("exit-animation");
+              setTimeout(() => {
+                window.location.href = link.href;
+              }, 300);
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

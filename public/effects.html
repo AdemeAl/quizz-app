@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juicy Effects - Version Incassable</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --primary: #6366f1; --success: #22c55e; --error: #ef4444; --bg: #0f172a; }
+        body { font-family: sans-serif; background: var(--bg); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; }
+        .container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; z-index: 10; }
+        button { padding: 15px 25px; font-size: 1rem; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; color: white; background: var(--primary); transition: transform 0.1s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        button:active { transform: scale(0.9); }
+        .btn-win { background: var(--success); grid-column: span 2; font-size: 1.5rem; }
+        .btn-shake { background: var(--error); }
+        
+        /* Animations */
+        @keyframes shake { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(10px, -10px); } 50% { transform: translate(-10px, 10px); } 75% { transform: translate(10px, 10px); } }
+        .effect-shake { animation: shake 0.1s ease-in-out 4; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
+        .effect-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 100; }
+        .effect-flash { animation: flash-anim 0.3s ease-out; }
+        @keyframes flash-anim { 0% { opacity: 0.9; } 100% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div id="flash"></div>
+    <h1 id="title">Juice Lab 🚀</h1>
+
+    <div class="container">
+        <button class="btn-shake" onclick="triggerEffect('shake')">Secousse</button>
+        <button onclick="triggerEffect('pop')">Pop / Zoom</button>
+        <button onclick="triggerEffect('confetti')">Confetti</button>
+        <button onclick="triggerEffect('flash')">Flash Blanc</button>
+        <button class="btn-win" onclick="triggerEffect('mega')">🏆 MEGA WIN 🏆</button>
+    </div>
+
+    <script>
+        // --- GÉNÉRATEUR DE SONS (SANS FICHIERS) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSynthesizedSound(type) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'thud') { // Son de secousse (bas)
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(0.01, now + 0.2);
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start();
+                osc.stop(now + 0.2);
+            } 
+            else if (type === 'blip') { // Son de bouton (haut)
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(400, now + 0.1);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start();
+                osc.stop(now + 0.1);
+            }
+            else if (type === 'victory') { // Fanfare simple
+                [440, 554, 659, 880].forEach((freq, i) => {
+                    const o = audioCtx.createOscillator();
+                    const g = audioCtx.createGain();
+                    o.connect(g); g.connect(audioCtx.destination);
+                    o.frequency.value = freq;
+                    g.gain.setValueAtTime(0.1, now + (i * 0.1));
+                    g.gain.exponentialRampToValueAtTime(0.01, now + (i * 0.1) + 0.3);
+                    o.start(now + (i * 0.1));
+                    o.stop(now + (i * 0.1) + 0.3);
+                });
+            }
+        }
+
+        // --- LOGIQUE DES EFFETS ---
+        function triggerEffect(type) {
+            // Activer l'audio (nécessaire sur certains navigateurs)
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const body = document.body;
+            const title = document.getElementById('title');
+            const flash = document.getElementById('flash');
+
+            if (type === 'shake') {
+                playSynthesizedSound('thud');
+                body.classList.remove('effect-shake');
+                void body.offsetWidth;
+                body.classList.add('effect-shake');
+            }
+
+            if (type === 'pop') {
+                playSynthesizedSound('blip');
+                title.classList.remove('effect-pop');
+                void title.offsetWidth;
+                title.classList.add('effect-pop');
+            }
+
+            if (type === 'confetti') {
+                playSynthesizedSound('victory');
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+
+            if (type === 'flash') {
+                flash.classList.remove('effect-flash');
+                void flash.offsetWidth;
+                flash.classList.add('effect-flash');
+            }
+
+            if (type === 'mega') {
+                playSynthesizedSound('victory');
+                triggerEffect('shake');
+                triggerEffect('flash');
+                triggerEffect('pop');
+                confetti({ particleCount: 250, spread: 180, origin: { y: 0.5 }, scalar: 1.2 });
+            }
+        }
+    </script>
+</body>
+</html>

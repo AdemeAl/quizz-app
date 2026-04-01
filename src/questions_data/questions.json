@@ -1,0 +1,102 @@
+[
+  {
+    "question": "Quelle est la primitive de la fonction f(x) = x^n (pour n ≠ -1) ?",
+    "answers": {
+      "a": "n * x^(n-1)",
+      "b": "[1/(n+1)] * x^(n+1)",
+      "c": "x^(n+1)"
+    },
+    "correctAnswer": "b",
+    "explanation": "Pour intégrer une puissance de x, on augmente l'exposant de 1 et on divise par ce nouvel exposant."
+  },
+  {
+    "question": "Quelle est la primitive de f(x) = e^(2x) ?",
+    "answers": {
+      "a": "2e^(2x)",
+      "b": "e^(2x)",
+      "c": "(1/2)e^(2x)"
+    },
+    "correctAnswer": "c",
+    "explanation": "La primitive de e^(ax) est (1/a)e^(ax). Ici a = 2."
+  },
+  {
+    "question": "Quelle est la primitive de f(x) = 1/x sur ]0 ; +∞[ ?",
+    "answers": {
+      "a": "ln(x)",
+      "b": "-1/x²",
+      "c": "e^x"
+    },
+    "correctAnswer": "a",
+    "explanation": "Par définition, la dérivée de ln(x) est 1/x, donc ln(x) est une primitive de 1/x."
+  },
+  {
+    "question": "Si F est une primitive de f, que vaut une primitive de f(x) + k (où k est une constante) ?",
+    "answers": {
+      "a": "F(x) + k",
+      "b": "F(x) + kx",
+      "c": "k * F(x)"
+    },
+    "correctAnswer": "b",
+    "explanation": "La primitive d'une somme est la somme des primitives. La primitive de la constante k est kx."
+  },
+  {
+    "question": "Quelle est la forme de la primitive de u'(x) * e^(u(x)) ?",
+    "answers": {
+      "a": "e^(u(x))",
+      "b": "[u(x)]² * e^(u(x))",
+      "c": "u(x) * e^(u(x))"
+    },
+    "correctAnswer": "a",
+    "explanation": "La dérivée de e^u est u'e^u, donc la primitive de u'e^u est e^u."
+  },
+  {
+    "question": "Soit f(x) = cos(x). Quelle est sa primitive F telle que F(0) = 0 ?",
+    "answers": {
+      "a": "-sin(x)",
+      "b": "sin(x)",
+      "c": "sin(x) + 1"
+    },
+    "correctAnswer": "b",
+    "explanation": "La primitive de cos(x) est sin(x) + C. Comme sin(0) = 0, on a 0 + C = 0, donc C = 0."
+  },
+  {
+    "question": "Quelle est la primitive de f(x) = (2x + 1)^3 ?",
+    "answers": {
+      "a": "(1/4)(2x + 1)^4",
+      "b": "(1/8)(2x + 1)^4",
+      "c": "3(2x + 1)²"
+    },
+    "correctAnswer": "b",
+    "explanation": "C'est de la forme u' * u^n avec u = 2x+1. Il manque le coefficient u'=2. On ajuste : (1/2) * [u^4 / 4] = (1/8)u^4."
+  },
+  {
+    "question": "Quelle est la primitive de f(x) = 1/x² sur ]0 ; +∞[ ?",
+    "answers": {
+      "a": "ln(x²)",
+      "b": "1/x",
+      "c": "-1/x"
+    },
+    "correctAnswer": "c",
+    "explanation": "La dérivée de 1/x est -1/x². Par conséquent, la primitive de 1/x² est -1/x."
+  },
+  {
+    "question": "Quelle est la primitive de f(x) = u'(x) / u(x) (avec u(x) > 0) ?",
+    "answers": {
+      "a": "ln(u(x))",
+      "b": "1 / u(x)",
+      "c": "u(x)²"
+    },
+    "correctAnswer": "a",
+    "explanation": "La dérivée de ln(u) est u'/u. C'est une formule fondamentale du cours."
+  },
+  {
+    "question": "Toutes les primitives d'une fonction f sur un intervalle I...",
+    "answers": {
+      "a": "Sont strictement identiques",
+      "b": "Diffèrent d'une constante réelle C",
+      "c": "Sont toutes nulles en 0"
+    },
+    "correctAnswer": "b",
+    "explanation": "Si F et G sont deux primitives de f, alors (F-G)' = f-f = 0, donc F-G est une constante."
+  }
+]
