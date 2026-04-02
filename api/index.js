@@ -168,12 +168,42 @@ app.post("/api/quiz/theme", async (req, res) => {
       Contraintes : Une seule bonne réponse, réponses courtes, explications pédagogiques.
     `;
 
+    if (!process.env.GEMINI_API_KEY) {
+      return res.status(500).json({
+        error:
+          "Clé GEMINI_API_KEY manquante. Configurez la variable d'environnement sur Vercel (Settings > Environment Variables).",
+      });
+    }
+
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: prompt,
     });
 
-    const parsed = saveQuestionsFromAI(response.text);
+    const textResult =
+      response?.text ||
+      response?.output?.[0]?.content?.[0]?.text ||
+      response?.output?.[0]?.text ||
+      "";
+
+    if (!textResult) {
+      console.error("Aucun texte retourné par l'IA", response);
+      return res.status(502).json({
+        error:
+          "L'IA n'a pas renvoyé de texte de réponse. Vérifiez la connexion à l'API Gemini.",
+      });
+    }
+
+    let parsed;
+    try {
+      parsed = saveQuestionsFromAI(textResult);
+    } catch (parseErr) {
+      console.error("Erreur parsing questions IA:", parseErr);
+      return res
+        .status(500)
+        .json({ error: "Impossible de parser le JSON généré par l'IA." });
+    }
+
     console.log("questions générées ✅");
     res.json({ questions: parsed });
   } catch (err) {
@@ -244,7 +274,32 @@ app.post("/api/quiz/pdf", upload.single("monPdf"), async (req, res) => {
       contents: quizPrompt,
     });
 
-    const parsed = saveQuestionsFromAI(quizResponse.text);
+    const textResult =
+      quizResponse?.text ||
+      quizResponse?.output?.[0]?.content?.[0]?.text ||
+      quizResponse?.output?.[0]?.text ||
+      "";
+
+    if (!textResult) {
+      console.error("Aucun texte retourné par l'IA (PDF)", quizResponse);
+      return res.status(502).json({
+        error:
+          "L'IA n'a pas renvoyé de texte de réponse (PDF). Vérifiez la configuration Gemini.",
+      });
+    }
+
+    let parsed;
+    try {
+      parsed = saveQuestionsFromAI(textResult);
+    } catch (parseErr) {
+      console.error("Erreur parsing PDF IA:", parseErr);
+      return res
+        .status(500)
+        .json({
+          error: "Impossible de parser le JSON généré à partir du PDF.",
+        });
+    }
+
     console.log("questions générées à partir du PDF ✅");
     res.json({ message: "Quiz généré depuis le PDF", questions: parsed });
   } catch (error) {
