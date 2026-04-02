@@ -22,6 +22,8 @@ const QUESTIONS_FILE_PATH = path.resolve(
   "src/questions_data/questions.json",
 );
 
+let generatedQuestionsCache = [];
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -53,11 +55,8 @@ const saveQuestionsFromAI = (rawText) => {
   if (!Array.isArray(parsed) || parsed.length === 0) {
     throw new Error("Le format de questions est invalide.");
   }
-  fs.writeFileSync(
-    QUESTIONS_FILE_PATH,
-    JSON.stringify(parsed, null, 2),
-    "utf-8",
-  );
+  generatedQuestionsCache = parsed;
+  return parsed;
 };
 
 // Routes Auth
@@ -174,9 +173,9 @@ app.post("/api/quiz/theme", async (req, res) => {
       contents: prompt,
     });
 
-    saveQuestionsFromAI(response.text);
-    console.log("questions.json généré ✅");
-    res.json({ url: "/quiz.html" });
+    const parsed = saveQuestionsFromAI(response.text);
+    console.log("questions générées ✅");
+    res.json({ questions: parsed });
   } catch (err) {
     console.error("Erreur Thème:", err);
     res.status(500).json({ error: "Échec de génération par thème" });
@@ -245,12 +244,9 @@ app.post("/api/quiz/pdf", upload.single("monPdf"), async (req, res) => {
       contents: quizPrompt,
     });
 
-    saveQuestionsFromAI(quizResponse.text);
-    console.log("questions.json généré à partir du PDF ✅");
-    res.json({
-      message: "Quiz généré depuis le PDF",
-      url: "/quiz.html",
-    });
+    const parsed = saveQuestionsFromAI(quizResponse.text);
+    console.log("questions générées à partir du PDF ✅");
+    res.json({ message: "Quiz généré depuis le PDF", questions: parsed });
   } catch (error) {
     console.error("DÉTAILS DE L'ERREUR :");
     console.error("Message:", error.message);
@@ -259,6 +255,23 @@ app.post("/api/quiz/pdf", upload.single("monPdf"), async (req, res) => {
       console.error("Data:", error.response.data);
     }
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/quiz/questions", async (req, res) => {
+  try {
+    if (generatedQuestionsCache.length > 0) {
+      return res.json({ questions: generatedQuestionsCache });
+    }
+
+    const fileData = await fs.promises.readFile(QUESTIONS_FILE_PATH, "utf-8");
+    const questions = JSON.parse(fileData);
+    return res.json({ questions });
+  } catch (err) {
+    console.error("Impossible de charger questions locales:", err);
+    return res
+      .status(500)
+      .json({ error: "Impossible de charger les questions" });
   }
 });
 

@@ -77,6 +77,20 @@ async function initializeQuiz() {
 }
 
 async function loadLocalData() {
+  // Priorité à l'API (en mode déploiement Vercel) puis fallback local
+  try {
+    const response = await fetch("/api/quiz/questions");
+    if (response.ok) {
+      const result = await response.json();
+      if (Array.isArray(result.questions) && result.questions.length > 0) {
+        data = result.questions;
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn("Échec chargement questions via API, fallback local :", err);
+  }
+
   const response = await fetch("./src/questions_data/questions.json");
   if (!response.ok) {
     throw new Error("Impossible de charger les questions locales.");
