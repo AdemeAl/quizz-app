@@ -77,7 +77,22 @@ async function initializeQuiz() {
 }
 
 async function loadLocalData() {
-  // Priorité à l'API (en mode déploiement Vercel) puis fallback local
+  // Priorité aux questions stockées en session lors de la génération,
+  // puis à l'API (en mode déploiement Vercel), puis fallback local.
+  const storedQuiz = sessionStorage.getItem("generatedQuiz");
+  if (storedQuiz) {
+    try {
+      const parsed = JSON.parse(storedQuiz);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        data = parsed;
+        return;
+      }
+    } catch (err) {
+      console.warn("Données de quiz en session invalides :", err);
+    }
+    sessionStorage.removeItem("generatedQuiz");
+  }
+
   try {
     const response = await fetch("/api/quiz/questions");
     if (response.ok) {

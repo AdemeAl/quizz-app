@@ -242,10 +242,19 @@
               throw new Error("Erreur lors de la génération du quiz.");
             }
             const payload = await response.json();
-            if (!payload?.url) {
+            if (payload?.error) {
+              throw new Error(payload.error);
+            }
+            if (!payload?.questions) {
               throw new Error("Réponse invalide du serveur.");
             }
-            window.location.href = resolveQuizUrl(payload.url);
+            sessionStorage.setItem(
+              "generatedQuiz",
+              JSON.stringify(payload.questions),
+            );
+            const theme = form.theme?.value.trim();
+            const query = theme ? `?theme=${encodeURIComponent(theme)}` : "";
+            window.location.href = resolveQuizUrl() + query;
           })
           .catch((error) => {
             console.error(error);
@@ -351,8 +360,15 @@
           if (!response.ok) throw new Error("Erreur serveur");
 
           const data = await response.json();
-          if (data?.url) {
-            window.location.href = resolveQuizUrl(data.url);
+          if (data?.error) {
+            throw new Error(data.error);
+          }
+          if (data?.questions) {
+            sessionStorage.setItem(
+              "generatedQuiz",
+              JSON.stringify(data.questions),
+            );
+            window.location.href = resolveQuizUrl();
             return;
           }
           resultDiv.className = "resultat-box";
