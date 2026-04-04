@@ -106,7 +106,7 @@ async function loadLocalData() {
     console.warn("Échec chargement questions via API, fallback local :", err);
   }
 
-  const response = await fetch("./src/questions_data/questions.json");
+  const response = await fetch("./questions_data/questions.json");
   if (!response.ok) {
     throw new Error("Impossible de charger les questions locales.");
   }
