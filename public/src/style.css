@@ -1,0 +1,688 @@
+@import url("https://fonts.googleapis.com/css2?family=Ranchers&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+body {
+    font-family: "Roboto", "Courier New", Courier, monospace;
+}
+
+/* Secousse de l'écran */
+@keyframes megaShake {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(10px, -10px);
+    }
+
+    50% {
+        transform: translate(-10px, 10px);
+    }
+
+    75% {
+        transform: translate(10px, 10px);
+    }
+}
+
+.trigger-shake {
+    animation: megaShake 0.1s ease-in-out 4;
+}
+
+/* Flash blanc rapide */
+.flash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+}
+
+.animate-flash {
+    animation: flashFade 0.4s ease-out;
+}
+
+@keyframes flashFade {
+    0% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Conffetis */
+@keyframes win-shake {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(5px, -5px);
+    }
+
+    50% {
+        transform: translate(-5px, 5px);
+    }
+
+    75% {
+        transform: translate(5px, 5px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.apply-win-shake {
+    /* We run it quickly 4 times to make it feel like a "thud" or "impact" */
+    animation: win-shake 0.1s ease-in-out 4;
+}
+
+/* Define the shake movement */
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+/* Create a class to trigger it */
+.shake-effect {
+    animation: shake 0.5s;
+    /* Duration of the shake */
+    animation-iteration-count: infinite;
+    /* Or set to a number like 1 */
+}
+
+.ranchers-regular {
+    font-family: "Ranchers", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.top-bar-infos
+{
+    display: flex;
+    align-items: center;
+    
+}
+
+#demo {
+    margin-right: 5px;
+}
+
+.progress-bar {
+    border-radius: 28px;
+    width: 60%;
+    margin: 0 10px;
+    background-color: #d3e3fd;
+}
+
+.progress-bar .bar {
+    border-radius: 28px;
+    width: 20%;
+    height: 19px;
+    background-color: #0b57d0;
+}
+
+.score {
+    display: flex;
+    align-items: center;
+}
+
+.score #questions-lvl {
+    margin: 0px 10px;
+}
+
+.score .incorrect {
+    color: #b3261e;
+    background-color: #f9dedc;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 18px;
+    padding: 5px 10px;
+    width: 49px;
+    height: 25px;
+    margin-left: 8px;
+}
+
+.score .correct {
+    background-color: #c4eed0;
+    color: #146c2e;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 18px;
+    padding: 5px 10px;
+    width: 49px;
+    height: 25px;
+    margin-left: 8px;
+}
+
+.score .correct span,
+.incorrect span {
+    margin-left: 5px;
+}
+
+/* CSS */
+.home-button {
+    margin-left: 30px;
+    align-items: center;
+    appearance: none;
+    background-color: #0b57d0;
+    border: 0;
+    border-radius: 24px;
+    box-shadow:
+        rgba(45, 35, 66, 0.4) 0 2px 4px,
+        rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+        rgba(58, 65, 111, 0.5) 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: "Roboto";
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-top: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition:
+        box-shadow 0.15s,
+        transform 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 18px;
+}
+
+.home-button:focus {
+    box-shadow:
+        #3c4fe0 0 0 0 1.5px inset,
+        rgba(45, 35, 66, 0.4) 0 2px 4px,
+        rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+        #3c4fe0 0 -3px 0 inset;
+}
+
+.home-button:hover {
+    box-shadow:
+        rgba(45, 35, 66, 0.4) 0 4px 8px,
+        rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+        #3c4fe0 0 -3px 0 inset;
+    transform: translateY(-2px);
+    background-color: #0b57d0d5;
+}
+
+.home-button:active {
+    box-shadow: #3c4fe0 0 3px 7px inset;
+    transform: translateY(2px);
+}
+
+.quiz-container {
+    background-color: #f74646;
+    border-radius: 3px;
+    color: black;
+    font-family:
+        "Roboto", "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    padding: 20px 30px;
+    text-align: center;
+    margin: 60px 40px;
+    height: 60vh;
+    max-width: 700px;
+    /* Limite la largeur du conteneur */
+    margin: 40px auto;
+    /* Centre le quiz sur la page */
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    /* Fond blanc comme dans l'image */
+}
+
+.quiz.invisible {
+    display: none;
+}
+
+#question {
+    font-size: large;
+    font-size: 3rem;
+}
+
+#answer-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Espace entre les boutons */
+}
+
+.buttons {
+    width: 100%;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 1.2em;
+    font-weight: 400;
+    color: #333;
+    background-color: #f7f7f7;
+    /* Fond légèrement gris pour les options */
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    /* Coins arrondis pour les options */
+    cursor: pointer;
+    transition:
+        background-color 0.2s,
+        box-shadow 0.2s,
+        border-color 0.2s;
+    line-height: 1.4;
+}
+
+.buttons::selection {
+    border: black;
+}
+
+.buttons.correct-answer {
+    background-color: #c4eed0;
+}
+
+.buttons.incorrect-answer {
+    background-color: #ffcac7;
+}
+
+.buttons:hover:not(.incorrect-answer, .correct-answer) {
+    background-color: #e9e9e9;
+    border-color: #ccc;
+}
+
+.key-hint {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    margin-right: 10px;
+    color: #004a77;
+    font-weight: bold;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Optionnel : un petit effet quand on appuie sur la touche */
+.buttons:active {
+    transform: scale(0.98);
+}
+
+
+.explanation {
+    display: none;
+    font-style: italic;
+}
+
+.explanation.visible {
+    display: block;
+}
+
+.next-button {
+    padding: 12px 28px;
+    margin-top: 18px;
+    right: 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: white;
+    background-color: #0b57d0;
+    /* Bleu vif */
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+    /* Ombre de couleur */
+    transition: background-color 0.2s;
+}
+
+.next-button.disabled {
+    background-color: #5f6061;
+}
+
+.next-button:hover {
+    background-color: #2366f8;
+    /* Bleu légèrement plus foncé au survol */
+}
+
+/* Affichage des scores */
+section {
+    display: none;
+    /* Caché par défaut */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    /* Réduit un peu pour laisser de la place à l'analyse */
+    width: 100%;
+}
+
+/* Utilise flex au lieu de block pour garder le centrage */
+section.visible {
+    display: flex;
+}
+
+/* --- Grille de résultats --- */
+.results-display {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin-top: 40px;
+    align-items: stretch;
+}
+
+.results-display .score-display {
+    background-color: #f0f4f9;
+    max-width: 120px;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.score-display h3 {
+    font-size: 0.9rem;
+    color: #444746;
+    margin: 0;
+}
+
+#score-span {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #001d35;
+}
+
+/* --- Bloc Analyse IA --- */
+.results-display .analyse-section {
+    display: flex;
+    background-color: #f0f4f9;
+    border-radius: 12px;
+    align-items: center;
+    padding: 0 20px;
+    min-height: 135px;
+}
+
+.analyse-section img {
+    max-width: 60px;
+    margin-right: 15px;
+}
+
+.analyse-section .analyse-text {
+    max-width: 400px;
+    margin-right: 20px;
+}
+
+.analyse-text h4 {
+    margin: 0;
+    color: #1f1f1f;
+}
+
+.analyse-text p {
+    font-size: 0.85rem;
+    color: #444746;
+    margin: 5px 0 0 0;
+}
+#analysis-text {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #c2e7ff;
+    border-radius: 16px;
+    max-width: 700px;
+    width: 90%;
+    line-height: 1.6;
+    color: #1f1f1f;
+    font-family: "Google Sans Text", sans-serif;
+    white-space: pre-line;
+    max-height: 40vh;
+    
+    /* Garde les sauts de ligne de l'IA */
+}
+
+#analysis-text:empty {
+    display: none;
+    /* Cache le cadre si vide */
+}
+
+.analyse-section .analyse-btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 34px;
+    padding: 0 24px;
+    height: 40px;
+    display: block;
+    color: #004a77;
+    background-color: #c2e7ff;
+    font-size: 0.875rem;
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    height: var(--mat-button-tonal-container-height, 40px);
+    font-family: "Google Sans Flex",
+        "Google Sans Text",
+        "Google Sans",
+        sans-serif;
+    font-weight: 550;
+}
+
+.analyse-section .analyse-btn:hover {
+    background-color: #c2e7ff89;
+}
+
+
+/* --- Liens de fin --- */
+.end-links {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+/* Style du bouton de partage */
+#share-btn {
+    --color: #646b8c;
+    --line-width: 105%;
+    --line-height: 1px;
+    --line-easing: ease;
+    --line-transition-duration: 300ms;
+
+    position: relative;
+    text-decoration: none;
+    color: var(--color);
+    font-family: "Inter", sans-serif;
+    padding: 0.2rem 0;
+    display: inline-block;
+    /* Assure que le lien respecte le padding */
+}
+
+/* La ligne de soulignement animée */
+#share-btn::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: var(--line-width);
+    height: var(--line-height);
+    background: var(--color);
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform var(--line-transition-duration) var(--line-easing);
+    z-index: 1;
+}
+
+/* Animation au survol */
+#share-btn:hover::before {
+    transform-origin: left;
+    transform: scaleX(1);
+}
+
+#share-btn:hover span {
+    --deg: -45deg;
+}
+
+#share-btn:hover span::before {
+    transform: rotate(var(--deg));
+}
+
+#share-btn:hover span::after {
+    transform: translateX(-1px) rotate(var(--deg));
+}
+
+/* ==========================================
+   RESPONSIVE (Mobile)
+   ========================================== */
+@media (max-width: 768px) {
+
+  .analyse-text p{
+    display: none;
+  }
+  .quiz-container {
+    margin: 12px;
+    padding: 16px 12px;
+    height: auto;
+    min-height: 60vh;
+  }
+
+  .top-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .progress-bar {
+    width: 50%;
+    margin: 0;
+  }
+
+  #demo {
+    margin-right: 0;
+  }
+
+  .score {
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  #questions-lvl {
+    margin: 0;
+  }
+
+  #question {
+    font-size: 2.1rem;
+  }
+
+  #answer-buttons .buttons,
+  .buttons {
+    font-size: 1rem;
+    padding: 12px 14px;
+  }
+
+  .key-hint {
+    font-size: 0.65rem;
+  }
+
+  .next-button {
+    width: 100%;
+    padding: 12px 18px;
+    margin-top: 16px;
+  }
+
+  .end-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  #analysis-text {
+    max-height: 35vh;
+  }
+}
+
+@media (max-width: 480px) {
+  #question {
+    font-size: 1.8rem;
+  }
+
+  .buttons {
+    font-size: 0.95rem;
+  }
+
+  .progress-bar .bar {
+    height: 15px;
+  }
+
+  #analysis-text {
+    max-height: 40vh;
+  }
+  .analyse-section img {
+    display: none;
+  };
+  .progress-bar
+  {
+    width: 100%;
+  }
+  #quit-modal div
+  {
+    margin: 10px;
+  }
+}

@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuizMaster – Landing Page</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="stylequiz.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="/logo.png" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+  </head>
+
+  <body>
+    <!-- PAGE WRAPPER -->
+
+    <div class="page">
+      <!-- TOP BAR -->
+
+      <div class="flex">
+        <header class="topbar">
+          <div class="brand">QuizMaster</div>
+          <button
+            class="burger-btn"
+            id="menu-toggle"
+            type="button"
+            aria-label="Ouvrir le menu  "
+            aria-expanded="false"
+          >
+            ☰
+          </button>
+        </header>
+        <nav class="top-actions">
+          <a href="index.html">Accueil</a>
+          <a href="login.html">Se connecter / S'inscrire</a>
+          <a href="leaderboard.html">Classement</a>
+        </nav>
+      </div>
+      <!-- HERO SECTION -->
+      <main class="hero">
+        <!-- QUIZ SECTION (DEFAULT) -->
+        <section id="quiz" class="quiz-section active">
+          <div class="hero-text">
+            <h3 style="font-style: italic; color: grey" id="user-text">
+              Bonjour
+            </h3>
+            <h1>Testez vos connaissances</h1>
+            <p>
+              Défiez-vous avec des quiz intelligents, affrontez d'autres joueurs
+              et grimpez dans le classement.
+            </p>
+            <ul class="features">
+              <li>Plusieurs catégories</li>
+              <li>Défis quotidiens</li>
+              <li>Classement mondial</li>
+            </ul>
+            <form id="quiz-form" action="/api/quiz/theme" method="POST">
+              <select name="langue" id="langue-select" required>
+                <option value="">🌐 Sélectionnez une langue</option>
+                <option value="français">🇫🇷 Français</option>
+                <option value="anglais">🇬🇧 Anglais</option>
+                <option value="espagnol">🇪🇸 Espagnol</option>
+                <option value="allemand">🇩🇪 Allemand</option>
+                <option value="italien">🇮🇹 Italien</option>
+                <option value="portugais">🇵🇹 Portugais</option>
+                <option value="japonais">🇯🇵 Japonais</option>
+                <option value="chinois">🇨🇳 Chinois</option>
+                <option value="russe">🇷🇺 Russe</option>
+                <option value="arabe">🇸🇦 Arabe</option>
+              </select>
+              <input
+                id="theme-input"
+                type="text"
+                name="theme"
+                placeholder="Thème (ex: Science, Histoire)"
+                required
+              />
+              <button id="button-load" class="start-btn" type="submit">
+                Générer le Quiz
+              </button>
+            </form>
+            <!-- UPLOAD PDF SECTION -->
+            <section id="upload" class="form-section">
+              <form id="uploadForm">
+                <label class="custum-file-upload" for="pdfFile">
+                  <div class="icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill=""
+                      viewBox="0 0 24 24"
+                    >
+                      <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+                      <g
+                        stroke-linejoin="round"
+                        stroke-linecap="round"
+                        id="SVGRepo_tracerCarrier"
+                      ></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <path
+                          fill=""
+                          d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z"
+                          clip-rule="evenodd"
+                          fill-rule="evenodd"
+                        ></path>
+                      </g>
+                    </svg>
+                  </div>
+                  <div class="text">
+                    <span>Click to upload PDF</span>
+                    <input
+                      type="file"
+                      id="pdfFile"
+                      accept="application/pdf"
+                      required
+                      placeholder="Sélectionnez un fichier PDF"
+                    />
+                  </div>
+                </label>
+                <div id="resultat"></div>
+
+                <button type="submit" id="submitBtn" class="start-btn">
+                  Analyser avec Gemini
+                </button>
+              </form>
+            </section>
+          </div>
+        </section>
+        <a id="toggle-form" href="#">📄 Analyseur de Documents</a>
+      </main>
+    </div>
+    <span class="loader" id="load"></span>
+    <script>
+      // ==================== BASCULEMENT MENU ====================
+      const toggleLink = document.getElementById("toggle-form");
+      const quizSection = document.getElementById("quiz-form");
+
+      const uploadSection = document.getElementById("upload");
+      let isQuiz = true;
+
+      // Burger menu (mobile)
+      const burgerBtn = document.getElementById("menu-toggle");
+      const topActions = document.querySelector(".top-actions");
+      const featuresList = document.querySelector(".features");
+      if (burgerBtn && topActions) {
+        const syncFeaturesVisibility = () => {
+          if (!featuresList) return;
+          const isMobile = window.matchMedia("(max-width: 768px)").matches;
+          const menuOpened = topActions.classList.contains("open");
+          featuresList.style.display = isMobile && menuOpened ? "none" : "";
+        };
+
+        burgerBtn.addEventListener("click", () => {
+          const opened = topActions.classList.toggle("open");
+          burgerBtn.setAttribute("aria-expanded", String(opened));
+          syncFeaturesVisibility();
+        });
+
+        topActions.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            topActions.classList.remove("open");
+            burgerBtn.setAttribute("aria-expanded", "false");
+            syncFeaturesVisibility();
+          });
+        });
+
+        window.addEventListener("resize", syncFeaturesVisibility);
+        syncFeaturesVisibility();
+      }
+
+      toggleLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        isQuiz = !isQuiz;
+
+        if (isQuiz) {
+          quizSection.style.display = "block";
+          document.getElementById("theme-input").style.margin = "10px auto";
+          document.getElementById("button-load").style.width = "100%";
+          uploadSection.classList.remove("active");
+          toggleLink.textContent = "📄 Analyseur de Documents";
+        } else {
+          quizSection.style.display = "none";
+          uploadSection.classList.add("active");
+          toggleLink.textContent = "📝 Retour au Quiz";
+        }
+      });
+
+      // ==================== FORMULAIRE QUIZ ====================
+      const input = document.querySelector("#pdfFile");
+
+      if (input) {
+        input.addEventListener("change", function () {
+          const file = this.files[0];
+
+          if (file.type !== "application/pdf") {
+            alert("Ce n'est pas un fichier PDF !");
+            this.value = ""; // Reset
+            return;
+          }
+
+          console.log("Nom du document :", file.name);
+        });
+      }
+
+      const userTextElement = document.getElementById("user-text");
+      const sessionUser = localStorage.getItem("sessionUser");
+      if (sessionUser) {
+        userTextElement.innerText = `Bonjour ${JSON.parse(sessionUser).username}`;
+      }
+
+      const loader = document.getElementById("load");
+      const resolveQuizUrl = (apiUrl) => {
+        if (apiUrl && /^https?:\/\//i.test(apiUrl)) return apiUrl;
+        if (apiUrl && apiUrl.startsWith("/")) {
+          if (window.location.protocol !== "file:") {
+            return `${window.location.origin}${apiUrl}`;
+          }
+          return `${window.location.origin}${apiUrl}`;
+        }
+        if (window.location.protocol !== "file:") {
+          return `${window.location.origin}/quiz.html`;
+        }
+        return `${window.location.origin}/quiz.html`;
+      };
+
+      document.getElementById("quiz-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        loader.classList.add("visible");
+        document.querySelector(".page").style.filter = "blur(3px)";
+        const form = e.currentTarget;
+        const params = new URLSearchParams(new FormData(form));
+
+        fetch("/api/quiz/theme", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: params.toString(),
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              throw new Error("Erreur lors de la génération du quiz.");
+            }
+            const payload = await response.json();
+            if (payload?.error) {
+              throw new Error(payload.error);
+            }
+            if (!payload?.questions) {
+              throw new Error("Réponse invalide du serveur.");
+            }
+            sessionStorage.setItem(
+              "generatedQuiz",
+              JSON.stringify(payload.questions),
+            );
+            const theme = form.theme?.value.trim();
+            const query = theme ? `?theme=${encodeURIComponent(theme)}` : "";
+            window.location.href = resolveQuizUrl() + query;
+          })
+          .catch((error) => {
+            console.error(error);
+            alert("Impossible de générer le quiz pour le moment.");
+            loader.classList.remove("visible");
+            document.querySelector(".page").style.filter = "none";
+          });
+      });
+
+      // ==================== GESTION DU DRAG & DROP ====================
+      const dropZone = document.querySelector(".custum-file-upload");
+      const fileInput = document.getElementById("pdfFile");
+
+      // Empêcher le comportement par défaut du navigateur (ouvrir le fichier)
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          },
+          false,
+        );
+      });
+
+      // Ajouter/Retirer la classe visuelle lors du survol
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          () => dropZone.classList.add("drag-over"),
+          false,
+        );
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          () => dropZone.classList.remove("drag-over"),
+          false,
+        );
+      });
+
+      // Gérer le dépôt du fichier
+      dropZone.addEventListener("drop", (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+
+        if (files.length > 0) {
+          fileInput.files = files; // On assigne le fichier déposé à l'input
+          handleFileSelection(files[0]); // On déclenche la validation visuelle
+        }
+      });
+
+      // Fonction utilitaire pour valider et afficher le nom du fichier
+      function handleFileSelection(file) {
+        if (file.type !== "application/pdf") {
+          alert("Désolé, seuls les fichiers PDF sont acceptés.");
+          fileInput.value = "";
+          document.querySelector(".custum-file-upload .text span").innerText =
+            "Click to upload PDF";
+          return;
+        }
+        // Modifier le texte pour montrer que le fichier est bien sélectionné
+        document.querySelector(".custum-file-upload .text span").innerText =
+          `Fichier prêt : ${file.name}`;
+      }
+
+      // Écouter aussi le changement classique (clic)
+      fileInput.addEventListener("change", function () {
+        if (this.files.length > 0) handleFileSelection(this.files[0]);
+      });
+
+      // ==================== ENVOI DU FORMULAIRE ====================
+      const uploadForm = document.getElementById("uploadForm");
+      const resultDiv = document.getElementById("resultat");
+      const submitBtn = document.getElementById("submitBtn");
+
+      uploadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const file = fileInput.files[0];
+        if (!file) {
+          alert("Veuillez sélectionner un fichier d'abord.");
+          return;
+        }
+
+        // Masquer la zone d'upload pendant l'analyse
+        dropZone.style.display = "none";
+
+        const formData = new FormData();
+        formData.append("monPdf", file);
+
+        // UI : État de chargement
+        resultDiv.className = "resultat-box loading";
+        resultDiv.innerText = `⏳ Gemini analyse ${file.name}, veuillez patienter...`;
+        submitBtn.disabled = true;
+
+        try {
+          const response = await fetch("/api/quiz/pdf", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) throw new Error("Erreur serveur");
+
+          const data = await response.json();
+          if (data?.error) {
+            throw new Error(data.error);
+          }
+          if (data?.questions) {
+            sessionStorage.setItem(
+              "generatedQuiz",
+              JSON.stringify(data.questions),
+            );
+            window.location.href = resolveQuizUrl();
+            return;
+          }
+          resultDiv.className = "resultat-box";
+          resultDiv.innerText = data.message || "Quiz généré avec succès.";
+        } catch (error) {
+          resultDiv.className = "resultat-box error";
+          resultDiv.innerText = "❌ Une erreur est survenue lors de l'analyse.";
+          dropZone.style.display = "flex"; // Réafficher en cas d'erreur
+          console.error(error);
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+    <script type="module" defer>
+      import { polyfillCountryFlagEmojis } from "https://cdn.skypack.dev/country-flag-emoji-polyfill";
+      polyfillCountryFlagEmojis();
+    </script>
+  </body>
+</html>

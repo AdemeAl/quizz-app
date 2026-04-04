@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Classement - QuizMaster</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="stylequiz.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="/logo.png" />
+    <link rel="icon" type="image/png" href="/logo.png" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div class="page">
+      <div class="flex">
+        <header class="topbar">
+          <div class="brand">QuizMaster</div>
+          <button
+            class="burger-btn"
+            id="menu-toggle"
+            type="button"
+            aria-label="Ouvrir le menu  "
+            aria-expanded="false"
+          >
+            ☰
+          </button>
+        </header>
+        <nav class="top-actions">
+          <a href="index.html">Accueil</a>
+          <a href="login.html">Se connecter / S'inscrire</a>
+          <a href="leaderboard.html">Classement</a>
+        </nav>
+      </div>
+      
+
+      <section class="leaderboard-section">
+        <div class="leaderboard-header">
+          <h2>🏆 Classement Mondial</h2>
+          <p>Les meilleurs scores enregistrés en ligne</p>
+        </div>
+
+        <div class="leaderboard-wrapper">
+          <table id="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rang</th>
+                <th>Joueur</th>
+                <th>Theme</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+              <tr><td colspan="4">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const SUPABASE_URL = 'https://okbquenkhxxtuvoroybm.supabase.co';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYnF1ZW5raHh4dHV2b3JveWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NTY4MDgsImV4cCI6MjA4OTIzMjgwOH0.FlDi9QTNpO7yF8eQ7GSgE3Tph3xXTUa9SZ4KbFBsCIo';
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      // Burger menu (mobile)
+      const burgerBtn = document.getElementById("menu-toggle");
+      const topActions = document.querySelector(".top-actions");
+      if (burgerBtn && topActions) {
+        burgerBtn.addEventListener("click", () => {
+          const opened = topActions.classList.toggle("open");
+          burgerBtn.setAttribute("aria-expanded", String(opened));
+        });
+
+        topActions.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            topActions.classList.remove("open");
+            burgerBtn.setAttribute("aria-expanded", "false");
+          });
+        });
+      }
+
+      async function fetchScores() {
+        const tbody = document.getElementById("leaderboard-body");
+        const { data, error } = await _supabase
+          .from('leaderboard')
+          .select('*')
+          .order('score', { ascending: false })
+          .limit(10);
+
+        if (error) {
+          tbody.innerHTML = "<tr><td colspan='4'>Erreur de chargement</td></tr>";
+          return;
+        }
+        
+        tbody.innerHTML = data.map((entry, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${entry.username}</td>
+            <td>${entry.theme}</td>
+            <td>${entry.score} pts</td>
+          </tr>
+        `).join('');
+      }
+
+      window.onload = fetchScores;
+    </script>
+  </body>
+</html>
