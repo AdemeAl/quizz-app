@@ -12,19 +12,11 @@
       "dest": "/api/index.js"
     },
     {
-      "src": "/src/(.*)",
-      "dest": "/src/$1"
+      "src": "/quiz.html",
+      "dest": "/api/index.js"
     },
     {
-      "src": "/landing-page/(.*)",
-      "dest": "/landing-page/$1"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/(.*)",
+      "src": "/",
       "dest": "/api/index.js"
     }
   ],
