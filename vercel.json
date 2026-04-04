@@ -12,6 +12,18 @@
       "dest": "/api/index.js"
     },
     {
+      "src": "/src/(.*)",
+      "dest": "/src/$1"
+    },
+    {
+      "src": "/landing-page/(.*)",
+      "dest": "/landing-page/$1"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/index.js"
     }
