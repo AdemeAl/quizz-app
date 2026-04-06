@@ -378,11 +378,6 @@ app.post("/api/quiz/analyse", async (req, res) => {
   }
 });
 
-// Servir les fichiers statiques (depuis la racine du projet)
-app.use(express.static(path.join(PROJECT_ROOT, "public")));
-app.use(express.static(path.join(PROJECT_ROOT, "landing-page")));
-app.use(express.static(path.join(PROJECT_ROOT, "src")));
-
 // Servir les fichiers statiques depuis public/
 app.use(express.static(path.join(PROJECT_ROOT, "public")));
 
