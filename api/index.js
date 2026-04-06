@@ -293,11 +293,9 @@ app.post("/api/quiz/pdf", upload.single("monPdf"), async (req, res) => {
       parsed = saveQuestionsFromAI(textResult);
     } catch (parseErr) {
       console.error("Erreur parsing PDF IA:", parseErr);
-      return res
-        .status(500)
-        .json({
-          error: "Impossible de parser le JSON généré à partir du PDF.",
-        });
+      return res.status(500).json({
+        error: "Impossible de parser le JSON généré à partir du PDF.",
+      });
     }
 
     console.log("questions générées à partir du PDF ✅");
@@ -385,12 +383,15 @@ app.use(express.static(path.join(PROJECT_ROOT, "public")));
 app.use(express.static(path.join(PROJECT_ROOT, "landing-page")));
 app.use(express.static(path.join(PROJECT_ROOT, "src")));
 
+// Servir les fichiers statiques depuis public/
+app.use(express.static(path.join(PROJECT_ROOT, "public")));
+
 // Route racine et quiz
 app.get("/", (req, res) => {
-  res.sendFile(path.join(PROJECT_ROOT, "quiz.html"));
+  res.sendFile(path.join(PROJECT_ROOT, "public", "index.html"));
 });
 app.get("/quiz.html", (req, res) => {
-  res.sendFile(path.join(PROJECT_ROOT, "quiz.html"));
+  res.sendFile(path.join(PROJECT_ROOT, "public", "quiz.html"));
 });
 
 export default app;
