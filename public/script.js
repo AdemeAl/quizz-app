@@ -373,7 +373,7 @@ if (cancelBtn && quitModal) {
 if (confirmQuitBtn) {
   confirmQuitBtn.addEventListener(
     "click",
-    () => (window.location.href = "../landing-page/index.html"),
+    () => (window.location.href = "/landing-page/index.html"),
   );
 }
 
