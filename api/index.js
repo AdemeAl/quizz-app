@@ -408,7 +408,7 @@ app.get("/quiz.html", (req, res) => {
   res.sendFile(path.join(PROJECT_ROOT, "public", "quiz.html"));
 });
 app.get("/landing-page/index.html", (req, res) => {
-  res.sendFile(path.join(PROJECT_ROOT, "landing-page", "index.html"));
+  res.redirect("/");
 });
 app.get("/leaderboard.html", (req, res) => {
   res.sendFile(path.join(PROJECT_ROOT, "landing-page", "leaderboard.html"));

@@ -399,10 +399,7 @@ if (cancelBtn && quitModal) {
   cancelBtn.addEventListener("click", () => (quitModal.style.display = "none"));
 }
 if (confirmQuitBtn) {
-  confirmQuitBtn.addEventListener(
-    "click",
-    () => (window.location.href = "/landing-page/index.html"),
-  );
+  confirmQuitBtn.addEventListener("click", () => (window.location.href = "/"));
 }
 
 // --- EFFETS SONORES ET VISUELS (Gardés tels quels) ---
