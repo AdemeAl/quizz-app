@@ -1,12 +1,30 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import "dotenv/config";
 
 // --- CONFIGURATION SUPABASE ---
-const SUPABASE_URL = ""; // À définir dans un fichier de configuration côté serveur si nécessaire
-const SUPABASE_KEY = ""; // Ne jamais exposer une clé secrète dans le code client
-const _supabase =
-  SUPABASE_URL && SUPABASE_KEY
-    ? createClient(SUPABASE_URL, SUPABASE_KEY)
-    : null;
+let SUPABASE_URL = "";
+let SUPABASE_KEY = "";
+let _supabase = null;
+
+// Charger la config Supabase depuis le serveur
+async function loadSupabaseConfig() {
+  try {
+    const response = await fetch("/api/config");
+    if (response.ok) {
+      const config = await response.json();
+      SUPABASE_URL = config.supabaseUrl;
+      SUPABASE_KEY = config.supabaseKey;
+      _supabase =
+        SUPABASE_URL && SUPABASE_KEY
+          ? createClient(SUPABASE_URL, SUPABASE_KEY)
+          : null;
+    } else {
+      console.warn("Config Supabase non disponible");
+    }
+  } catch (err) {
+    console.warn("Erreur chargement config Supabase:", err);
+  }
+}
 
 // --- VARIABLES D'ÉTAT ---
 let data = [];
@@ -44,6 +62,8 @@ const analyseBtn = document.getElementById("analyse-btn");
 // --- INITIALISATION ---
 
 async function initializeQuiz() {
+  await loadSupabaseConfig(); // Charger config Supabase d'abord
+
   const urlParams = new URLSearchParams(window.location.search);
   const sharedId = urlParams.get("sharedId");
 

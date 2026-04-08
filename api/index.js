@@ -378,6 +378,14 @@ app.post("/api/quiz/analyse", async (req, res) => {
   }
 });
 
+// Route pour config Supabase (clé publique)
+app.get("/api/config", (req, res) => {
+  res.json({
+    supabaseUrl: process.env.SUPABASE_URL,
+    supabaseKey: process.env.SUPABASE_KEY,
+  });
+});
+
 // Servir les fichiers statiques depuis public/
 app.use(express.static(path.join(PROJECT_ROOT, "public")));
 
