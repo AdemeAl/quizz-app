@@ -389,12 +389,24 @@ app.get("/api/config", (req, res) => {
 // Servir les fichiers statiques depuis public/
 app.use(express.static(path.join(PROJECT_ROOT, "public")));
 
-// Route racine et quiz
+// Routes pour les pages HTML
 app.get("/", (req, res) => {
   res.sendFile(path.join(PROJECT_ROOT, "public", "index.html"));
 });
 app.get("/quiz.html", (req, res) => {
   res.sendFile(path.join(PROJECT_ROOT, "public", "quiz.html"));
+});
+app.get("/landing-page/index.html", (req, res) => {
+  res.sendFile(path.join(PROJECT_ROOT, "landing-page", "index.html"));
+});
+app.get("/leaderboard.html", (req, res) => {
+  res.sendFile(path.join(PROJECT_ROOT, "landing-page", "leaderboard.html"));
+});
+app.get("/login.html", (req, res) => {
+  res.sendFile(path.join(PROJECT_ROOT, "landing-page", "login.html"));
+});
+app.get("/effects.html", (req, res) => {
+  res.sendFile(path.join(PROJECT_ROOT, "public", "effects.html"));
 });
 
 export default app;

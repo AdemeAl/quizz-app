@@ -248,6 +248,9 @@ async function analyseQuiz() {
 
 async function createShareLink() {
   if (!_supabase) {
+    await loadSupabaseConfig();
+  }
+  if (!_supabase) {
     alert("La fonctionnalité de partage n'est pas configurée.");
     return;
   }
@@ -279,6 +282,9 @@ async function saveScoreToCloud(points) {
   const urlParams = new URLSearchParams(window.location.search);
   const currentTheme = urlParams.get("theme") || "Général";
 
+  if (!_supabase) {
+    await loadSupabaseConfig();
+  }
   if (!_supabase) {
     console.warn(
       "La sauvegarde du score est désactivée : Supabase non configuré.",
