@@ -5,26 +5,38 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 let SUPABASE_URL = "https://okbquenkhxxtuvoroybm.supabase.co";
 let SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYnF1ZW5raHh4dHV2b3JveWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NTY4MDgsImV4cCI6MjA4OTIzMjgwOH0.FlDi9QTNpO7yF8eQ7GSgE3Tph3xXTUa9SZ4KbFBsCIo";
-      
+
 let _supabase = null;
 
 // Charger la config Supabase depuis le serveur
 async function loadSupabaseConfig() {
   try {
+    console.log("🔄 Chargement config Supabase...");
     const response = await fetch("/api/config");
+    console.log("📡 Réponse /api/config:", response.status);
+
     if (response.ok) {
       const config = await response.json();
+      console.log("✅ Config reçue:", {
+        url: config.supabaseUrl,
+        keyExists: !!config.supabaseKey,
+      });
+
       SUPABASE_URL = config.supabaseUrl;
       SUPABASE_KEY = config.supabaseKey;
       _supabase =
         SUPABASE_URL && SUPABASE_KEY
           ? createClient(SUPABASE_URL, SUPABASE_KEY)
           : null;
+      console.log("🎯 Supabase initialisé:", !!_supabase);
     } else {
-      console.warn("Config Supabase non disponible");
+      console.warn(
+        "❌ Config Supabase non disponible - Status:",
+        response.status,
+      );
     }
   } catch (err) {
-    console.warn("Erreur chargement config Supabase:", err);
+    console.warn("❌ Erreur chargement config Supabase:", err);
   }
 }
 
