@@ -1,8 +1,8 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
+import "dotenv/config"
 // --- CONFIGURATION SUPABASE ---
-let SUPABASE_URL = "";
-let SUPABASE_KEY = "";
+let SUPABASE_URL = process.env.SUPABASE_URL;
+let SUPABASE_KEY = proccess.env.SUPABASE_KEY;
 let _supabase = null;
 
 // Charger la config Supabase depuis le serveur

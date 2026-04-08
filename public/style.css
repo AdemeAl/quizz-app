@@ -494,8 +494,7 @@ section.visible {
     font-family: "Google Sans Text", sans-serif;
     white-space: pre-line;
     max-height: 40vh;
-    
-    /* Garde les sauts de ligne de l'IA */
+    overflow-y: auto;
 }
 
 #analysis-text:empty {
