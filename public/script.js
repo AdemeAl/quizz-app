@@ -354,7 +354,11 @@ answersButtons.addEventListener("click", (event) => {
 
 if (nextQuestionBtn[0])
   nextQuestionBtn[0].addEventListener("click", nextQuestion);
-if (shareBtn) shareBtn.addEventListener("click", createShareLink);
+if (shareBtn)
+  shareBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    createShareLink();
+  });
 if (analyseBtn) analyseBtn.addEventListener("click", analyseQuiz);
 
 // Cookies & Quit
