@@ -1,8 +1,11 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-import "dotenv/config"
+
 // --- CONFIGURATION SUPABASE ---
-let SUPABASE_URL = process.env.SUPABASE_URL;
-let SUPABASE_KEY = proccess.env.SUPABASE_KEY;
+
+const SUPABASE_URL = "https://okbquenkhxxtuvoroybm.supabase.co";
+const SUPABASE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rYnF1ZW5raHh4dHV2b3JveWJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NTY4MDgsImV4cCI6MjA4OTIzMjgwOH0.FlDi9QTNpO7yF8eQ7GSgE3Tph3xXTUa9SZ4KbFBsCIo";
+      
 let _supabase = null;
 
 // Charger la config Supabase depuis le serveur
