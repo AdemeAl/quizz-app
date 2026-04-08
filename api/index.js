@@ -396,8 +396,9 @@ app.get("/api/config", (req, res) => {
   });
 });
 
-// Servir les fichiers statiques depuis public/
+// Servir les fichiers statiques depuis public/ et landing-page/
 app.use(express.static(path.join(PROJECT_ROOT, "public")));
+app.use(express.static(path.join(PROJECT_ROOT, "landing-page")));
 
 // Routes pour les pages HTML
 app.get("/", (req, res) => {
