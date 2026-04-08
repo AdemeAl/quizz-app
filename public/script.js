@@ -272,10 +272,16 @@ async function createShareLink() {
   const urlParams = new URLSearchParams(window.location.search);
   const currentTheme = urlParams.get("theme") || "Général";
 
+  console.log("🔗 Tentative création lien partage...");
+  console.log("📝 Theme:", currentTheme);
+  console.log("📊 Data length:", data.length);
+
   const { data: insertedData, error } = await _supabase
     .from("quizzes")
     .insert([{ title: currentTheme, content: data }])
     .select();
+
+  console.log("📨 Réponse Supabase - Error:", error, "Data:", insertedData);
 
   if (!error && insertedData?.[0]?.id) {
     const shareableLink = `${window.location.origin}${window.location.pathname}?sharedId=${insertedData[0].id}`;
@@ -283,8 +289,11 @@ async function createShareLink() {
       alert("Lien de partage copié !");
     });
   } else {
-    console.error("Erreur création lien de partage:", error?.message);
-    alert("Impossible de créer le lien de partage.");
+    console.error("❌ Erreur création lien de partage:", error);
+    alert(
+      "Impossible de créer le lien de partage:\n" +
+        (error?.message || "Erreur inconnue"),
+    );
   }
 }
 
