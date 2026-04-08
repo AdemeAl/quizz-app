@@ -380,6 +380,16 @@ app.post("/api/quiz/analyse", async (req, res) => {
 
 // Route pour config Supabase (clé publique)
 app.get("/api/config", (req, res) => {
+  console.log("📋 Variables env disponibles:");
+  console.log(
+    "  - SUPABASE_URL:",
+    process.env.SUPABASE_URL ? "✅ défini" : "❌ undefined",
+  );
+  console.log(
+    "  - SUPABASE_KEY:",
+    process.env.SUPABASE_KEY ? "✅ défini" : "❌ undefined",
+  );
+
   res.json({
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseKey: process.env.SUPABASE_KEY,
