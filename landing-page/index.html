@@ -82,19 +82,24 @@
               <li>Classement mondial</li>
             </ul>
             <form id="quiz-form" action="/api/quiz/theme" method="POST">
-              <select name="langue" id="langue-select" required>
-                <option value="">🌐 Sélectionnez une langue</option>
-                <option value="français">🇫🇷 Français</option>
-                <option value="anglais">🇬🇧 Anglais</option>
-                <option value="espagnol">🇪🇸 Espagnol</option>
-                <option value="allemand">🇩🇪 Allemand</option>
-                <option value="italien">🇮🇹 Italien</option>
-                <option value="portugais">🇵🇹 Portugais</option>
-                <option value="japonais">🇯🇵 Japonais</option>
-                <option value="chinois">🇨🇳 Chinois</option>
-                <option value="russe">🇷🇺 Russe</option>
-                <option value="arabe">🇸🇦 Arabe</option>
-              </select>
+              <div class="form-group-language">
+                <div class="langue-wrapper">
+                  <select name="langue" id="langue-select" required>
+                    <option value="">🌐 Sélectionnez une langue</option>
+                    <option value="français">🇫🇷 Français</option>
+                    <option value="anglais">🇬🇧 Anglais</option>
+                    <option value="espagnol">🇪🇸 Espagnol</option>
+                    <option value="allemand">🇩🇪 Allemand</option>
+                    <option value="italien">🇮🇹 Italien</option>
+                    <option value="portugais">🇵🇹 Portugais</option>
+                    <option value="japonais">🇯🇵 Japonais</option>
+                    <option value="chinois">🇨🇳 Chinois</option>
+                    <option value="russe">🇷🇺 Russe</option>
+                    <option value="arabe">🇸🇦 Arabe</option>
+                  </select>
+                  <span class="langue-badge" id="langue-badge">11 langues</span>
+                </div>
+              </div>
               <input
                 id="theme-input"
                 type="text"
@@ -102,20 +107,28 @@
                 placeholder="Thème (ex: Science, Histoire)"
                 required
               />
-              <select name="numQuestions" id="num-questions" required>
-                <option value="">❓ Nombre de questions</option>
-                <option value="5">5 questions</option>
-                <option value="10" selected>10 questions</option>
-                <option value="15">15 questions</option>
-                <option value="20">20 questions</option>
-              </select>
-              <select name="duration" id="duration" required>
-                <option value="">⏱️ Durée par question</option>
-                <option value="30">30 secondes</option>
-                <option value="60" selected>60 secondes</option>
-                <option value="90">90 secondes</option>
-                <option value="120">2 minutes</option>
-              </select>
+              <div class="form-group-options">
+                <div class="option-item">
+                  <select name="numQuestions" id="num-questions" required>
+                    <option value="">❓ Nombre de questions</option>
+                    <option value="5">5 questions</option>
+                    <option value="10" selected>10 questions</option>
+                    <option value="15">15 questions</option>
+                    <option value="20">20 questions</option>
+                  </select>
+                  <span class="option-label">Questions</span>
+                </div>
+                <div class="option-item">
+                  <select name="duration" id="duration" required>
+                    <option value="">⏱️ Durée par question</option>
+                    <option value="30">30 secondes</option>
+                    <option value="60" selected>60 secondes</option>
+                    <option value="90">90 secondes</option>
+                    <option value="120">2 minutes</option>
+                  </select>
+                  <span class="option-label">Temps</span>
+                </div>
+              </div>
               <button id="button-load" class="start-btn" type="submit">
                 Générer le Quiz
               </button>
@@ -158,29 +171,44 @@
                   </div>
                 </label>
                 <div id="resultat"></div>
-                <select name=\"langue\" id=\"pdf-langue-select\" required>
-                  <option value=\"\">🌐 Sélectionnez une langue</option>
-                  <option value=\"français\">🇫🇷 Français</option>
-                  <option value=\"anglais\">🇬🇧 Anglais</option>
-                  <option value=\"espagnol\">🇪🇸 Espagnol</option>
-                  <option value=\"allemand\">🇩🇪 Allemand</option>
-                </select>
+                <div class="form-group-language">
+                  <div class="langue-wrapper">
+                    <select name="langue" id="pdf-langue-select" required>
+                      <option value="">🌐 Sélectionnez une langue</option>
+                      <option value="français">🇫🇷 Français</option>
+                      <option value="anglais">🇬🇧 Anglais</option>
+                      <option value="espagnol">🇪🇸 Espagnol</option>
+                      <option value="allemand">🇩🇪 Allemand</option>
+                    </select>
+                    <span class="langue-badge" id="pdf-langue-badge"
+                      >4 langues</span
+                    >
+                  </div>
+                </div>
 
-                <select name=\"numQuestions\" id=\"pdf-num-questions\" required>
-                  <option value=\"\">❓ Nombre de questions</option>
-                  <option value=\"5\">5 questions</option>
-                  <option value=\"10\" selected>10 questions</option>
-                  <option value=\"15\">15 questions</option>
-                  <option value=\"20\">20 questions</option>
-                </select>
+                <div class="form-group-options">
+                  <div class="option-item">
+                    <select name="numQuestions" id="pdf-num-questions" required>
+                      <option value="">❓ Nombre de questions</option>
+                      <option value="5">5 questions</option>
+                      <option value="10" selected>10 questions</option>
+                      <option value="15">15 questions</option>
+                      <option value="20">20 questions</option>
+                    </select>
+                    <span class="option-label">Questions</span>
+                  </div>
 
-                <select name=\"duration\" id=\"pdf-duration\" required>
-                  <option value=\"\">⏱️ Durée par question</option>
-                  <option value=\"30\">30 secondes</option>
-                  <option value=\"60\" selected>60 secondes</option>
-                  <option value=\"90\">90 secondes</option>
-                  <option value=\"120\">2 minutes</option>
-                </select>
+                  <div class="option-item">
+                    <select name="duration" id="pdf-duration" required>
+                      <option value="">⏱️ Durée par question</option>
+                      <option value="30">30 secondes</option>
+                      <option value="60" selected>60 secondes</option>
+                      <option value="90">90 secondes</option>
+                      <option value="120">2 minutes</option>
+                    </select>
+                    <span class="option-label">Temps</span>
+                  </div>
+                </div>
 
                 <button type="submit" id="submitBtn" class="start-btn">
                   Analyser avec Gemini
@@ -247,6 +275,32 @@
           toggleLink.textContent = "📝 Retour au Quiz";
         }
       });
+
+      // ==================== GESTION DES BADGES DE LANGUE ====================
+      const langueSelect = document.getElementById("langue-select");
+      const langueBadge = document.getElementById("langue-badge");
+      const pdfLangueSelect = document.getElementById("pdf-langue-select");
+      const pdfLangueBadge = document.getElementById("pdf-langue-badge");
+
+      // Mettre à jour le badge de langue (formulaire thème)
+      if (langueSelect && langueBadge) {
+        langueSelect.addEventListener("change", (e) => {
+          const selectedOptions = Array.from(langueSelect.options).filter(
+            (opt) => opt.value,
+          );
+          langueBadge.textContent = `${selectedOptions.length} langue${selectedOptions.length > 1 ? "s" : ""}`;
+        });
+      }
+
+      // Mettre à jour le badge de langue (formulaire PDF)
+      if (pdfLangueSelect && pdfLangueBadge) {
+        pdfLangueSelect.addEventListener("change", (e) => {
+          const selectedOptions = Array.from(pdfLangueSelect.options).filter(
+            (opt) => opt.value,
+          );
+          pdfLangueBadge.textContent = `${selectedOptions.length} langue${selectedOptions.length > 1 ? "s" : ""}`;
+        });
+      }
 
       // ==================== FORMULAIRE QUIZ ====================
       const input = document.querySelector("#pdfFile");
@@ -410,8 +464,14 @@
 
         const formData = new FormData();
         formData.append("monPdf", file);
-        formData.append("langue", document.getElementById("pdf-langue-select").value || "français");
-        formData.append("numQuestions", document.getElementById("pdf-num-questions").value || "10");
+        formData.append(
+          "langue",
+          document.getElementById("pdf-langue-select").value || "français",
+        );
+        formData.append(
+          "numQuestions",
+          document.getElementById("pdf-num-questions").value || "10",
+        );
 
         // UI : État de chargement
         resultDiv.className = "resultat-box loading";
@@ -435,8 +495,14 @@
               "generatedQuiz",
               JSON.stringify(data.questions),
             );
-            sessionStorage.setItem("quizDuration", document.getElementById("pdf-duration").value || "60");
-            sessionStorage.setItem("quizNumQuestions", document.getElementById("pdf-num-questions").value || "10");
+            sessionStorage.setItem(
+              "quizDuration",
+              document.getElementById("pdf-duration").value || "60",
+            );
+            sessionStorage.setItem(
+              "quizNumQuestions",
+              document.getElementById("pdf-num-questions").value || "10",
+            );
             window.location.href = resolveQuizUrl();
             return;
           }
