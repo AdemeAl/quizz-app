@@ -145,15 +145,21 @@ app.post("/api/quiz/theme", async (req, res) => {
   try {
     const theme = String(req.body?.theme || "").trim();
     const langue = String(req.body?.langue || "").trim() || "français";
+    const numQuestions = Math.max(
+      5,
+      Math.min(20, parseInt(req.body?.numQuestions || "10", 10)),
+    ); // 5-20 questions
 
     if (!theme) {
       return res.status(400).json({ error: "Le thème est obligatoire." });
     }
 
-    console.log(`Génération thème : ${theme} (${langue})`);
+    console.log(
+      `Génération thème : ${theme} (${langue}) - ${numQuestions} questions`,
+    );
 
     const prompt = `
-      Génère 10 questions de quiz sur le thème : ${theme}.
+      Génère ${numQuestions} questions de quiz sur le thème : ${theme}.
       Niveau : BAC. Langue : ${langue}.
 
       Respecte STRICTEMENT ce format JSON (un tableau d'objets) :
@@ -219,6 +225,10 @@ app.post("/api/quiz/pdf", upload.single("monPdf"), async (req, res) => {
     }
 
     const langue = req.body.langue || "français";
+    const numQuestions = Math.max(
+      5,
+      Math.min(20, parseInt(req.body?.numQuestions || "10", 10)),
+    ); // 5-20 questions
 
     const contents = [
       { text: "Resume ce document de manière détaillée" },
@@ -239,7 +249,7 @@ app.post("/api/quiz/pdf", upload.single("monPdf"), async (req, res) => {
     console.log("Questions à partir du PDF générées ✅");
 
     const quizPrompt = `
-      Génère 10 questions de quiz basées sur ce document :
+      Génère ${numQuestions} questions de quiz basées sur ce document :
 
       ${summary}
 

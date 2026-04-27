@@ -102,6 +102,20 @@
                 placeholder="Thème (ex: Science, Histoire)"
                 required
               />
+              <select name="numQuestions" id="num-questions" required>
+                <option value="">❓ Nombre de questions</option>
+                <option value="5">5 questions</option>
+                <option value="10" selected>10 questions</option>
+                <option value="15">15 questions</option>
+                <option value="20">20 questions</option>
+              </select>
+              <select name="duration" id="duration" required>
+                <option value="">⏱️ Durée par question</option>
+                <option value="30">30 secondes</option>
+                <option value="60" selected>60 secondes</option>
+                <option value="90">90 secondes</option>
+                <option value="120">2 minutes</option>
+              </select>
               <button id="button-load" class="start-btn" type="submit">
                 Générer le Quiz
               </button>
@@ -145,6 +159,28 @@
                 </label>
                 <div id="resultat"></div>
 
+                <select name=\"langue\" id=\"pdf-langue-select\" required>
+                  <option value=\"\">🌐 Sélectionnez une langue</option>
+                  <option value=\"français\">🇫🇷 Français</option>
+                  <option value=\"anglais\">🇬🇧 Anglais</option>
+                  <option value=\"espagnol\">🇪🇸 Espagnol</option>
+                  <option value=\"allemand\">🇩🇪 Allemand</option>
+                </select>
+
+                <select name=\"numQuestions\" id=\"pdf-num-questions\" required>
+                  <option value=\"\">❓ Nombre de questions</option>
+                  <option value=\"5\">5 questions</option>
+                  <option value=\"10\" selected>10 questions</option>
+                  <option value=\"15\">15 questions</option>
+                  <option value=\"20\">20 questions</option>
+                </select>
+                <select name=\"duration\" id=\"pdf-duration\" required>
+                  <option value=\"\">⏱️ Durée par question</option>
+                  <option value=\"30\">30 secondes</option>
+                  <option value=\"60\" selected>60 secondes</option>
+                  <option value=\"90\">90 secondes</option>
+                  <option value=\"120\">2 minutes</option>
+                </select>
                 <button type="submit" id="submitBtn" class="start-btn">
                   Analyser avec Gemini
                 </button>
@@ -255,6 +291,8 @@
         document.querySelector(".page").style.filter = "blur(3px)";
         const form = e.currentTarget;
         const params = new URLSearchParams(new FormData(form));
+        const numQuestions = form.numQuestions?.value || "10";
+        const duration = form.duration?.value || "60";
 
         fetch("/api/quiz/theme", {
           method: "POST",
@@ -276,6 +314,8 @@
               "generatedQuiz",
               JSON.stringify(payload.questions),
             );
+            sessionStorage.setItem("quizDuration", duration);
+            sessionStorage.setItem("quizNumQuestions", numQuestions);
             const theme = form.theme?.value.trim();
             const query = theme ? `?theme=${encodeURIComponent(theme)}` : "";
             window.location.href = resolveQuizUrl() + query;
@@ -369,6 +409,8 @@
 
         const formData = new FormData();
         formData.append("monPdf", file);
+        formData.append("langue", document.getElementById("pdf-langue-select").value || "français");
+        formData.append("numQuestions", document.getElementById("pdf-num-questions").value || "10");
 
         // UI : État de chargement
         resultDiv.className = "resultat-box loading";
@@ -392,6 +434,8 @@
               "generatedQuiz",
               JSON.stringify(data.questions),
             );
+            sessionStorage.setItem("quizDuration", document.getElementById("pdf-duration").value || "60");
+            sessionStorage.setItem("quizNumQuestions", document.getElementById("pdf-num-questions").value || "10");
             window.location.href = resolveQuizUrl();
             return;
           }

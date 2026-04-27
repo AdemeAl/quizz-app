@@ -33,9 +33,10 @@ let currentQuestion = 0;
 let Incscore = 0;
 let Corscore = 0;
 let hasAnswered = false;
-let time = 60;
+let time = 60; // Valeur par défaut
 let timerInterval;
 let isQuizEnded = false;
+let maxQuestions = 10; // Nombre de questions max
 
 // --- SÉLECTEURS DOM ---
 const questionTitle = document.getElementById("question");
@@ -63,6 +64,17 @@ const analyseBtn = document.getElementById("analyse-btn");
 
 async function initializeQuiz() {
   await loadSupabaseConfig(); // Charger config Supabase d'abord
+
+  // Récupérer les paramètres du quiz depuis sessionStorage
+  const storedDuration = sessionStorage.getItem("quizDuration");
+  const storedNumQuestions = sessionStorage.getItem("quizNumQuestions");
+
+  if (storedDuration) {
+    time = parseInt(storedDuration, 10);
+  }
+  if (storedNumQuestions) {
+    maxQuestions = parseInt(storedNumQuestions, 10);
+  }
 
   const urlParams = new URLSearchParams(window.location.search);
   const sharedId = urlParams.get("sharedId");
@@ -104,7 +116,7 @@ async function loadLocalData() {
     try {
       const parsed = JSON.parse(storedQuiz);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        data = parsed;
+        data = parsed.slice(0, maxQuestions); // Limiter au nombre max
         return;
       }
     } catch (err) {
@@ -118,7 +130,7 @@ async function loadLocalData() {
     if (response.ok) {
       const result = await response.json();
       if (Array.isArray(result.questions) && result.questions.length > 0) {
-        data = result.questions;
+        data = result.questions.slice(0, maxQuestions); // Limiter au nombre max
         return;
       }
     }
@@ -130,7 +142,8 @@ async function loadLocalData() {
   if (!response.ok) {
     throw new Error("Impossible de charger les questions locales.");
   }
-  data = await response.json();
+  const questions = await response.json();
+  data = questions.slice(0, maxQuestions); // Limiter au nombre max
 }
 
 // --- LOGIQUE DU QUIZ ---
